@@ -1,6 +1,7 @@
 import { Container, Button, Stack, Paper, Grid, TextField, FormControl, InputLabel, Select, MenuItem, Typography, InputAdornment, Box } from "@mui/material"
+import { Link } from "react-router";
 
-  const categorias = [
+const categorias = [
     'Eletrônicos',
     'Informática',
     'Acessórios',
@@ -16,9 +17,11 @@ export function NovoProdutoPagina() {
     return (
         <Container maxWidth="lg" sx={{ marginBottom: 2 }}>
                 <Stack direction="column" alignItems="start" marginY={2}>
-                    <Button variant="text" color="primary">
-                        Voltar
-                    </Button>
+                    <Link to={-1} style={{ textDecoration: 'none'}}>
+                        <Button variant="text" color="primary">
+                            Voltar
+                        </Button>
+                    </Link>
                     <h1>Novo produto</h1>
                 </Stack>
 
