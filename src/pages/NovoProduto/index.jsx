@@ -1,5 +1,6 @@
 import { Container, Button, Stack, Paper, Grid, TextField, FormControl, InputLabel, Select, MenuItem, Typography, InputAdornment, Box } from "@mui/material"
 import { Link } from "react-router";
+import { useForm } from "react-hook-form"
 
 const categorias = [
     'Eletrônicos',
@@ -11,9 +12,39 @@ const categorias = [
     'Esportes',
     'Beleza e Saúde',
     'Outros'
-  ];
+];
+
+const PRODUTOS_STORAGE_KEY = 'produtos_cadastrados';
 
 export function NovoProdutoPagina() {
+    const { register, handleSubmit } = useForm({
+        defaultValues: {
+            id: new Date().getTime(),
+            nome: '',
+            categoria: '',
+            preco: 0,
+            quantidade: 0,
+            descricao: ''
+        }
+    })
+
+    function onSubmit(data) {
+        const produtosStorage = localStorage.getItem(PRODUTOS_STORAGE_KEY);
+
+        if(produtosStorage) {
+            const produtos = JSON.parse(produtosStorage); /// []
+            produtos.push(data)
+
+            localStorage.setIten(PRODUTOS_STORAGE_KEY, JSON.stringify(produtos));
+
+        } else {
+            const produtos = [data];
+            localStorage.setItem(PRODUTOS_STORAGE_KEY, JSON.stringify(produtos));
+            
+        }
+        alert("Produto cadastrado com sucesso!");
+    }
+
     return (
         <Container maxWidth="lg" sx={{ marginBottom: 2 }}>
                 <Stack direction="column" alignItems="start" marginY={2}>
@@ -27,20 +58,21 @@ export function NovoProdutoPagina() {
 
                  {/* Formulário */}
                 <Paper sx={{ p: 3 }}>
-                    <form style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                    <form onSubmit={handleSubmit(onSubmit)} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                         <TextField
                             fullWidth
                             label="Nome do Produto"
                             required
+                            {...register('nome')}
                         />
                         <FormControl fullWidth >
                             <InputLabel>Categoria *</InputLabel>
                             <Select
-
-                            label="Categoria *"
+                                label="Categoria *"
+                                {...register('categoria')}
                             >
                             {categorias.map((categoria) => (
-                                <MenuItem key={categoria} >
+                                <MenuItem value={categoria} key={categoria} >
                                 {categoria}
                                 </MenuItem>
                             ))}
@@ -62,6 +94,7 @@ export function NovoProdutoPagina() {
                                 step: 0.01
                             }
                             }}
+                            {...register('preco', { valueAsNumber: true })}
                             required
                         />
                     
@@ -69,6 +102,7 @@ export function NovoProdutoPagina() {
                             fullWidth
                             label="Quantidade em Estoque"
                             type="number"
+                            {...register('quantidade', { valueAsNumber: true })}
                             required
                         />
                         
@@ -77,7 +111,7 @@ export function NovoProdutoPagina() {
                             label="Descrição"
                             multiline
                             rows={4}
-                            
+                            {...register('descricao')}
                             placeholder="Descreva as características do produto..."
                         />
                       
