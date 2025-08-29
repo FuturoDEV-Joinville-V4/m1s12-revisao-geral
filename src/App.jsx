@@ -1,15 +1,9 @@
-import { NovoProdutoPagina } from "./pages/NovoProduto"
-import { ProdutosPagina } from "./pages/Produtos"
+import { RouterProvider } from "react-router"
+import { router } from "./routes"
 
 function App() {
   
-
-  return (
-    <>
-     {/* <ProdutosPagina /> */}
-     <NovoProdutoPagina />
-    </>
-  )
+  return <RouterProvider router={router} />
 }
 
 export default App

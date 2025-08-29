@@ -6,6 +6,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Button, Container, Stack } from '@mui/material';
+import { Link } from 'react-router';
 
 
 export function ProdutosPagina() {
@@ -14,9 +15,11 @@ export function ProdutosPagina() {
             <Container maxWidth="lg" sx={{ marginBottom: 2 }}>
                 <Stack direction="row" justifyContent="space-between" alignItems="center" marginY={2}>
                     <h1>Produtos</h1>
-                    <Button variant="contained" color="primary">
-                        Adicionar Produto
-                    </Button>
+                    <Link to="/novo" style={{ textDecoration: 'none' }}>
+                        <Button variant="contained" color="primary">
+                            Adicionar Produto
+                        </Button>
+                    </Link>
                 </Stack>
             <TableContainer component={Paper}>
                 <Table  aria-label="simple table">
