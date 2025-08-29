@@ -1,10 +1,13 @@
+import { NovoProdutoPagina } from "./pages/NovoProduto"
+import { ProdutosPagina } from "./pages/Produtos"
 
 function App() {
   
 
   return (
     <>
-     <h1>Revisão</h1>
+     {/* <ProdutosPagina /> */}
+     <NovoProdutoPagina />
     </>
   )
 }
