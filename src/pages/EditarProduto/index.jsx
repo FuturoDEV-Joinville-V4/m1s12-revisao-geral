@@ -1,6 +1,7 @@
-import { Container, Button, Stack, Paper, Grid, TextField, FormControl, InputLabel, Select, MenuItem, Typography, InputAdornment, Box } from "@mui/material"
-import { Link } from "react-router";
+import { Container, Button, Stack, Paper, TextField, FormControl, InputLabel, Select, MenuItem, InputAdornment, Box } from "@mui/material"
+import { Link, useNavigate, useParams } from "react-router";
 import { useForm } from "react-hook-form"
+import { useEffect } from "react";
 
 const categorias = [
     'Eletrônicos',
@@ -16,7 +17,10 @@ const categorias = [
 
 const PRODUTOS_STORAGE_KEY = 'produtos_cadastrados';
 
-export function NovoProdutoPagina() {
+export function EditarProdutoPagina() {
+    const { id } = useParams();
+    const navigate = useNavigate();
+
     const { register, handleSubmit, reset } = useForm({
         defaultValues: {
             id: new Date().getTime(),
@@ -33,18 +37,38 @@ export function NovoProdutoPagina() {
 
         if(produtosStorage) {
             const produtos = JSON.parse(produtosStorage); /// []
-            produtos.push(data)
-
-            localStorage.setItem(PRODUTOS_STORAGE_KEY, JSON.stringify(produtos));
-
-        } else {
-            const produtos = [data];
-            localStorage.setItem(PRODUTOS_STORAGE_KEY, JSON.stringify(produtos));
             
-        }
-        alert("Produto cadastrado com sucesso!");
-        reset();
+            const novaListaProdutos = produtos.map((produto) => {
+                if(produto.id === data.id) {
+                    return data;
+                }
+                return produto;
+            })
+
+            localStorage.setItem(PRODUTOS_STORAGE_KEY, JSON.stringify(novaListaProdutos));
+
+        } 
+
+        alert("Produto atualizado com sucesso!");
+        
     }
+    
+    useEffect(() => {
+        const produtosStorage = localStorage.getItem(PRODUTOS_STORAGE_KEY);
+
+        if(produtosStorage) {
+            const produtos = JSON.parse(produtosStorage); /// []
+            const produtoEncontrado = produtos.find((produto) => produto.id === Number(id)); // +id
+
+            if(produtoEncontrado) {
+                reset(produtoEncontrado)
+            } else {
+                // redirecionar para a página de listagem => navigate
+                navigate('/');
+            }
+        }
+    }, [])
+
 
     return (
         <Container maxWidth="lg" sx={{ marginBottom: 2 }}>
@@ -54,7 +78,7 @@ export function NovoProdutoPagina() {
                             Voltar
                         </Button>
                     </Link>
-                    <h1>Novo produto</h1>
+                    <h1>Editar produto</h1>
                 </Stack>
 
                  {/* Formulário */}
@@ -122,7 +146,7 @@ export function NovoProdutoPagina() {
                             type="submit"
                             variant="contained"
                             >
-                            Criar produto
+                            Atualizar produto
                             </Button>
                         </Box>
                      
